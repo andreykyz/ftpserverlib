@@ -107,10 +107,11 @@ type clientHandler struct {
 	isTransferAborted   bool            // indicate if the transfer was aborted
 	tlsRequirement      TLSRequirement  // TLS requirement to respect
 	paramsMutex         sync.RWMutex    // mutex to protect the parameters exposed to the library users
+	errorOnAbort        bool            // Wrap error with ErrAbort if ABOR command recived while transfer
 }
 
 // newClientHandler initializes a client handler when someone connects
-func (server *FtpServer) newClientHandler(connection net.Conn, id uint32, transferType TransferType) *clientHandler {
+func (server *FtpServer) newClientHandler(connection net.Conn, id uint32, settings *Settings) *clientHandler {
 	p := &clientHandler{
 		server:              server,
 		conn:                connection,
@@ -120,8 +121,9 @@ func (server *FtpServer) newClientHandler(connection net.Conn, id uint32, transf
 		connectedAt:         time.Now().UTC(),
 		path:                "/",
 		selectedHashAlgo:    HASHAlgoSHA256,
-		currentTransferType: transferType,
+		currentTransferType: settings.DefaultTransferType,
 		logger:              server.Logger.With("clientId", id),
+		errorOnAbort:        settings.ErrorOnAbort,
 	}
 
 	return p
