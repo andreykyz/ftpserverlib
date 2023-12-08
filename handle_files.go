@@ -158,7 +158,9 @@ func (c *clientHandler) doFileTransfer(tr net.Conn, file io.ReadWriter, write bo
 			_, err = out.Write([]byte{})
 		}
 	}
-
+	if c.errorOnAbort && c.isTransferAborted {
+		err = errors.Join(err, ErrAbort)
+	}
 	if err != nil {
 		if fileTransferError, ok := file.(FileTransferError); ok {
 			fileTransferError.TransferError(err)

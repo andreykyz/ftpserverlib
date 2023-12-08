@@ -264,4 +264,5 @@ type Settings struct {
 	ActiveConnectionsCheck DataConnectionRequirement
 	// PasvConnectionsCheck defines the security requirements for passive connections
 	PasvConnectionsCheck DataConnectionRequirement
+	ErrorOnAbort         bool // Wrap error with ErrAbort if ABOR command recived while transfer
 }

@@ -9,6 +9,8 @@ var (
 	// ErrFileNameNotAllowed defines the error mapped to the FTP 553 reply code.
 	// As for RFC 959 this error is checked for STOR, APPE, RNTO
 	ErrFileNameNotAllowed = errors.New("filename not allowed")
+	// Generate error if abort is called by client to throw error to
+	ErrAbort = errors.New("abort triggered")
 )
 
 func getErrorCode(err error, defaultCode int) int {
